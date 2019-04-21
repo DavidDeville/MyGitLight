@@ -17,11 +17,14 @@ function directory_browse_files(string $directory_name, bool $recursive = false)
 	
 	foreach ($directory_content as $entry)
 	{
-		if (is_dir($directory_name . "/" . $entry))
+		if (is_dir($entry))
 		{
 			if ($recursive)
 			{
-				$files = array_merge($files, tar_list_directory($directory_name . $entry . "/", $recursive));
+				if ($directory_name == ".")
+					$files = array_merge($files, directory_browse_files($entry, $recursive));
+				else
+					$files = array_merge($files, directory_browse_files($directory_name . $entry . "/", $recursive));
 			}
 			else
 			{
@@ -30,7 +33,14 @@ function directory_browse_files(string $directory_name, bool $recursive = false)
 		}
 		else
 		{
-			array_push($files, $directory_name . $entry);
+			if ($directory_name === ".")
+			{
+				array_push($files, $entry);
+			}
+			else
+			{
+				array_push($files, $directory_name . "/" . $entry);
+			}
 		}
 	}
 
@@ -102,6 +112,34 @@ function directory_build_tree(Array $tree)
 		{
 			mkdir($directory);
 		}
+	}
+}
+
+function directory_locate_upwards(string $filename, string $folder = ".")
+{
+	static $call_count = 0;
+	if ($call_count == 16)
+	{
+		return (null);
+	}
+	$call_count++;
+
+	if ($folder === ".")
+	{
+		if (file_exists($filename))
+		{
+			return ($filename);
+		}
+		return (directory_locate_upwards($filename, ".."));
+	}
+
+	else
+	{
+		if (file_exists($folder . "/" . $filename))
+		{
+			return ($folder . "/" . $filename);
+		}
+		return (directory_locate_upwards($filename, $folder . "/.."));
 	}
 }
 
