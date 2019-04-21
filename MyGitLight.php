@@ -24,6 +24,11 @@ $sources = Array(
 	"tarball.php",
 );
 
+// Ficheirs de travail de MyGitLight
+$ignore_files = Array(
+	".COMMIT_MESSAGE",
+);
+
 if ($command === "init")
 {
 	// If $args is empty, no path was set for init
@@ -107,14 +112,31 @@ else if ($command === "commit")
 	$message = implode(" ", $args);
 	$files = directory_browse_files($working_directory, true);
 	$files = array_diff($files, $sources);
-	tar_create($files, commit_find_next_name($working_directory));
-
+	$files = array_diff($files, $ignore_files);
+	$commit_id = commit_find_next_id($working_directory);
+	$commit_file = $working_directory . "/.COMMIT_MESSAGE";
+	tar_create($files, $working_directory . "/" . $commit_id . ".mytar");
+	commit_save_message($commit_file,  $commit_id, $message);
 } // Fin de la commande commit
 
-
-else if ($command === "help")
+else if ($command === "rm")
 {
-	echo file_get_contents("help.txt");
+	foreach ($args as $file)
+	{
+		if (file_exists($file))
+		{
+			unlink($file);
+		}
+		if (file_exists($working_directory . "/" . $file))
+		{
+			unlink($working_directory . "/" . $file);
+		}
+	}
+}
+
+else if ($command === "log")
+{
+	commit_log($working_directory . "/.COMMIT_MESSAGE");
 }
 
 else
