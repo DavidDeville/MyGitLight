@@ -61,6 +61,12 @@ else if ($command === "rm")
 	rm($args);
 }
 
+else if ($command === "help")
+{
+	$manual = file_get_contents("help.txt");
+	echo $manual;
+}
+
 else
 {
 	die("Commande inconnue" . PHP_EOL);

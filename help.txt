@@ -4,11 +4,11 @@ NAME
 	MyGitLight - the stupid content tracker light
 
 SYNOPSIS
-	help 
+	help
 
 DESCRIPTION
 	MyGitLight is a simplified version of the original git. The concept
-	was to reuse the original git features and make them usable in a
+        is to reuse the original git features and make them usable in a
 	more simple way. The project can still be upgraded but no updates
 	are planned for the time being.
 
@@ -29,7 +29,7 @@ MyGitLight COMMANDS
 	    The archive contains all the selected files and folders.
 
 	rm
-	    Deleted specified files/folders.
+	    Delete specified files/folders.
 
 	log
-	    Display all commits in "$id $message" form.
+	    Display all commits in a "$id $message" form.
