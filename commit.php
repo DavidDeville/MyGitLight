@@ -34,7 +34,7 @@ function commit_save_message(string $commit_file, int $commit_id, string $messag
 	fclose($file);
 }
 
-function commit_log (string $commit_filename)
+function commit_log(string $commit_filename)
 {
 	$file = fopen($commit_filename, "r");
 	$lines = [];
@@ -50,5 +50,20 @@ function commit_log (string $commit_filename)
 		echo $line;
 	}
 }
+
+function commit(string $working_directory, Array $args)
+{
+	if ($args == [])
+	{
+		die ("a commit message is needed" . PHP_EOL);
+	}
+	$message = implode(" ", $args);
+	$files = directory_browse_files($working_directory, true);
+	$commit_id = commit_find_next_id($working_directory);
+	$commit_file = $working_directory . "/.COMMIT_MESSAGE";
+	tar_create($files, $working_directory . "/" . $commit_id . ".mytar");
+	commit_save_message($commit_file, $commit_id, $message);
+}
+
 
 ?>

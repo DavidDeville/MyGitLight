@@ -24,7 +24,7 @@ function directory_browse_files(string $directory_name, bool $recursive = false)
 				if ($directory_name == ".")
 					$files = array_merge($files, directory_browse_files($entry, $recursive));
 				else
-					$files = array_merge($files, directory_browse_files($directory_name . $entry . "/", $recursive));
+					$files = array_merge($files, directory_browse_files($directory_name . "/" . $entry, $recursive));
 			}
 			else
 			{
