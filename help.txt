@@ -1,0 +1,35 @@
+				MyGitLight Manual
+
+NAME
+	MyGitLight - the stupid content tracker light
+
+SYNOPSIS
+	help 
+
+DESCRIPTION
+	MyGitLight is a simplified version of the original git. The concept
+	was to reuse the original git features and make them usable in a
+	more simple way. The project can still be upgraded but no updates
+	are planned for the time being.
+
+OPTIONS
+	-- undefined
+
+MyGitLight COMMANDS
+	init
+	    Copy the source code in a specified folder (MyGitLight)
+
+	add
+	    Copy the current directory and sub directories recursively
+	    and place everything into a created folder named .MyGitLight.
+
+	commit
+
+	    Create a tar archive and puts it into your .MyGitLight folder.
+	    The archive contains all the selected files and folders.
+
+	rm
+	    Deleted specified files/folders.
+
+	log
+	    Display all commits in "$id $message" form.

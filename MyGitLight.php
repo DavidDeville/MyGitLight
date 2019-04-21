@@ -111,6 +111,12 @@ else if ($command === "commit")
 
 } // Fin de la commande commit
 
+
+else if ($command === "help")
+{
+	echo file_get_contents("help.txt");
+}
+
 else
 {
 	die("Commande inconnue" . PHP_EOL);
