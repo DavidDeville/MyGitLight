@@ -28,27 +28,25 @@ function tar_create_header(string $output, Array $files)
 /*
 ** Creates a tarball named $args["output"] and containing files in $args["input"]
 **
-** @param $args : the array of args sent to the script
+** @param Array $files : the files to put in the tarball
 */
-function tar_create(Array $args)
+function tar_create(Array $files, string $target_name)
 {
-	$recursive = in_array("recursive", $args["options"]);
-	
-	foreach ($args["input"] as $entry)
+	foreach ($files as $entry)
 	{
 		if (is_dir($entry))
 		{
-			$entry_content = directory_browse_files($entry, $recursive);
-			$args["input"] = array_merge($args["input"], $entry_content);
-			$args["input"] = array_diff($args["input"], Array($entry));
+			$entry_content = directory_browse_files($entry, true);
+			$files = array_merge($files, $entry_content);
+			$files = array_diff($files, Array($entry));
 		}
 	}
 
-	tar_create_header($args["output"], $args["input"]);
+	tar_create_header($target_name, $files);
 	
-	foreach ($args["input"] as $entry)
+	foreach ($files as $entry)
 	{
-		file_put_contents($args["output"], file_get_contents($entry), FILE_APPEND);
+		file_put_contents($target_name, file_get_contents($entry), FILE_APPEND);
 	}	
 }
 

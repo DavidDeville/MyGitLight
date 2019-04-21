@@ -17,4 +17,9 @@ function file_remove_path(string $filename)
 	return ($filename);
 }
 
+function file_was_modified(string $check_filename, string $filename)
+{
+	return (md5($check_filename) !== md5($filename));
+}
+
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-
+require_once "commit.php";
 require_once "directories.php";
 require_once "files.php";
 require_once "tarball.php";
@@ -26,6 +26,7 @@ $sources = Array(
 
 if ($command === "init")
 {
+	// If $args is empty, no path was set for init
 	if ($args === [])
 	{
 		die("Missing path" . PHP_EOL);
@@ -36,10 +37,12 @@ if ($command === "init")
 		die("this folder already has a MyGitLight");
 	}
 
+	// Reconstruction de l'arborescence de base dans le dossier .MyGitLight
 	$tree = directory_generate_path_to($args[0]);
 	array_push($tree, $args[0], $args[0] . "/.MyGitLight");
 	directory_build_tree($tree);
 
+	// Copie des fichiers 
 	foreach ($sources as $source)
 	{
 		file_copy($args[0] . "/.MyGitLight/" . $source, $source);
@@ -62,13 +65,15 @@ else if ($command === "add")
 	// Don't add .git folder and .MyGitLight
 	foreach ($args as $entry)
 	{
-		if ((strpos($entry, ".git/") === 0) || (strpos($entry, ".MyGitLight/") === 0))
+		if (
+			(strpos($entry, ".git/") === 0) || 
+			(strpos($entry, ".MyGitLight/") === 0))
 		{
 			$args = array_diff($args, Array($entry));
 		}
 	}
 
-	// Check for directories
+	// If folders were added, breplace them by their content in the list
 	foreach ($args as $entry)
 	{
 		if (is_dir($entry))
@@ -93,16 +98,16 @@ else if ($command === "add")
 
 else if ($command === "commit")
 {
-	var_dump($working_directory);
-	die();
 	if ($args == [])
 	{
 		die ("a commit message is needed" . PHP_EOL);
 	}
 
+	// Reconstruction du message de commit et création de l'archive
+	$message = implode(" ", $args);
 	$files = directory_browse_files($working_directory, true);
 	$files = array_diff($files, $sources);
-	//tar_create($files, )
+	tar_create($files, commit_find_next_name($working_directory));
 
 } // Fin de la commande commit
 
